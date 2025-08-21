@@ -1,6 +1,7 @@
 import {
   BASE_URL,
   DRILL_POSITIONS,
+  ExtraSmall_GUMS_POSITIONS,
   TEETH_POSITIONS,
   TOOTH_REGIONS,
 } from "./constants";
@@ -59,6 +60,14 @@ export const getSceneObjectStyle = (
 export const getTeethPositions = () => {
   const positions: Record<number, { x: number; y: number; z: number }> = {};
   Object.entries(TEETH_POSITIONS).forEach(([id, pos]) => {
+    positions[parseInt(id)] = { ...pos };
+  });
+  return positions;
+};
+
+export const getExtraSmallGumsPositions = () => {
+  const positions: Record<number, { x: number; y: number; z: number }> = {};
+  Object.entries(ExtraSmall_GUMS_POSITIONS).forEach(([id, pos]) => {
     positions[parseInt(id)] = { ...pos };
   });
   return positions;

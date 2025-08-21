@@ -22,15 +22,7 @@ export default function TeethAnimations() {
   }, []);
 
   return (
-    <Box
-      maxWidth="100vw"
-      minHeight="100dvh"
-      sx={{
-        background: "radial-gradient(circle, rgba(0,0,0,0), #d5e0ec)",
-      }}
-      px={3}
-      overflow="hidden"
-    >
+    <Box>
       <Grid container spacing={3} alignItems="start" pt={1}>
         <Grid size={{ xs: 12, sm: 12, md: 6 }}>
           <TeethPlayer data={dummyStepsResponse} autoPlay={false} />

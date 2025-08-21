@@ -1,11 +1,23 @@
 import { Provider } from "jotai";
-import TeethAnimations from "./Teeth";
 import { store } from "./heplers/Jotai";
+import { Box } from "@mui/material";
+import Jaw from "./Jaw";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <TeethAnimations />
+      <Box
+        maxWidth="100vw"
+        minHeight="100dvh"
+        sx={{
+          background: "radial-gradient(circle, rgba(0,0,0,0), #d5e0ec)",
+        }}
+        px={3}
+        overflow="hidden"
+      >
+        <Jaw />
+        {/* <TeethAnimations /> */}
+      </Box>
     </Provider>
   );
 };

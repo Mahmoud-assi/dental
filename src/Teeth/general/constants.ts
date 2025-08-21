@@ -1,3 +1,5 @@
+import { getToothRegion } from "./utils";
+
 export const BASE_URL = "https://static.bright-plans.com/3d-player/";
 
 export const TOOTH_REGIONS = {
@@ -83,6 +85,16 @@ export const DRILL_POSITIONS: Record<number, { x: number; y: number }> = {
   48: { x: 59, y: 505 },
 };
 
+export const ExtraSmall_GUMS_POSITIONS: Record<
+  number,
+  { x: number; y: number; z: number }
+> = Object.fromEntries(
+  Object.entries(TEETH_POSITIONS).map(([tooth, position]) => [
+    tooth,
+    { ...position, z: position.z + 1000 },
+  ])
+);
+
 export const TOOTH_IDS = (() => {
   const ids: number[] = [];
   for (let i = 1; i <= 4; i++) {
@@ -92,3 +104,17 @@ export const TOOTH_IDS = (() => {
 })();
 
 export const BASE_FILES = ["base", "base-mask", "drill", "laser"];
+
+export const UPPER_TOOTH_IDS = TOOTH_IDS.filter((id) => {
+  const region = getToothRegion(id);
+  return (
+    region === TOOTH_REGIONS.UPPER_LEFT || region === TOOTH_REGIONS.UPPER_RIGHT
+  );
+});
+
+export const LOWER_TOOTH_IDS = TOOTH_IDS.filter((id) => {
+  const region = getToothRegion(id);
+  return (
+    region === TOOTH_REGIONS.LOWER_RIGHT || region === TOOTH_REGIONS.LOWER_LEFT
+  );
+});

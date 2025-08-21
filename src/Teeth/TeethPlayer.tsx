@@ -10,7 +10,7 @@ import { BASE_URL } from "./general/constants";
 import { useImagePreloader } from "./general/hooks";
 import { getSceneObjectStyle } from "./general/utils";
 import { CircularProgress, IconButton, Stack } from "@mui/material";
-import ToothAnimation from "./ToothAnimation";
+import ToothAnimation from "./ToothBridgeAnimation";
 import ToolAnimation from "./ToolAnimation";
 import TitleAnimation from "./TitleAnimation";
 import { useAtom } from "jotai";

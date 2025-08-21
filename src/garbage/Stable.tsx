@@ -5,7 +5,7 @@ import { useImagePreloader } from "../Teeth/general/hooks";
 import type { SceneObj } from "../Teeth/general/types";
 import { getSceneObjectStyle, getTeethPositions } from "../Teeth/general/utils";
 import { BASE_URL, TOOTH_IDS } from "../Teeth/general/constants";
-import ToothAnimation from "../Teeth/ToothAnimation";
+import ToothAnimation from "../Teeth/ToothBridgeAnimation";
 import ToolAnimation from "../Teeth/ToolAnimation";
 
 export default function TeethPlayer({ width = 300 }: { width?: number }) {
