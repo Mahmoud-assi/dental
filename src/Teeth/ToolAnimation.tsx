@@ -59,10 +59,11 @@ export default function ToolAnimation({
     }
   }, [visible, onAnimationComplete, region, currentRegion]);
 
-  if (!currentTool) return null;
-
   // Don't render if region changed and we're in the process of switching
-  if (currentRegion !== null && currentRegion !== region && showDrill)
+  if (
+    (currentRegion !== null && currentRegion !== region && showDrill) ||
+    !currentTool
+  )
     return null;
 
   return (

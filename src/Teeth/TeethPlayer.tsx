@@ -5,14 +5,20 @@ import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import ReplayIcon from "@mui/icons-material/Replay";
-import type { SceneObj, Step, StepsResponse } from "./general/types";
+import type { Step, StepsResponse } from "./general/types";
 import { BASE_URL } from "./general/constants";
 import { useImagePreloader } from "./general/hooks";
 import { getSceneObjectStyle } from "./general/utils";
-import { CircularProgress, IconButton, Stack, Typography } from "@mui/material";
+import { CircularProgress, IconButton, Stack } from "@mui/material";
 import ToothAnimation from "./ToothAnimation";
 import ToolAnimation from "./ToolAnimation";
 import TitleAnimation from "./TitleAnimation";
+import { useAtom } from "jotai";
+import {
+  CompletedStepsAtom,
+  CurrentSceneAtom,
+  CurrentStepIndexAtom,
+} from "../atoms/Tooth";
 
 interface TeethPlayerProps {
   width?: number;
@@ -29,11 +35,11 @@ export default function TeethPlayer({
   onAllStepsComplete,
   autoPlay = false,
 }: TeethPlayerProps) {
-  const [currentScene, setCurrentScene] = useState<SceneObj[]>(data.status);
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [currentScene, setCurrentScene] = useAtom(CurrentSceneAtom);
+  const [currentStepIndex, setCurrentStepIndex] = useAtom(CurrentStepIndexAtom);
+  const [completedSteps, setCompletedSteps] = useAtom(CompletedStepsAtom);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoPlay);
   const [showTool, setShowTool] = useState<boolean>(false);
-  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
   const [animationState, setAnimationState] = useState<
     "idle" | "animating" | "completed"
   >("idle");
@@ -241,48 +247,12 @@ export default function TeethPlayer({
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        gap: 2,
-      }}
-    >
-      {/* Controls */}
-      <Stack alignItems="center" direction="row">
-        <IconButton
-          onClick={handlePreviousStep}
-          disabled={currentStepIndex === 0}
-        >
-          <SkipPreviousIcon />
-        </IconButton>
-
-        {allStepsCompleted ? (
-          <IconButton onClick={handleReplay}>
-            <ReplayIcon />
-          </IconButton>
-        ) : (
-          <IconButton onClick={handlePlayPause}>
-            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-          </IconButton>
-        )}
-
-        <IconButton
-          onClick={handleNextStep}
-          disabled={allStepsCompleted || currentStepIndex >= data.steps.length}
-        >
-          <SkipNextIcon />
-        </IconButton>
-      </Stack>
-
+    <Stack justifyContent="center" alignItems="center" width="100%" spacing={2}>
       {/* Progress indicator */}
-      <Typography variant="body2" color="text.secondary">
+      {/* <Typography variant="body2" color="text.secondary">
         Step {Math.min(currentStepIndex + 1, data.steps.length)} of{" "}
         {data.steps.length}: {currentStep?.title}
-      </Typography>
+      </Typography> */}
 
       {/* Teeth visualization */}
       <Box
@@ -339,12 +309,18 @@ export default function TeethPlayer({
           />
 
           {/* Title animation */}
-          {currentStep && animationState === "animating" && (
-            <TitleAnimation
-              title={currentStep?.title_animation!}
-              isVisible={currentStep && animationState === "animating"}
-            />
-          )}
+
+          <TitleAnimation
+            title={
+              allStepsCompleted
+                ? "End of the treatments"
+                : (() => {
+                    if (animationState === "animating")
+                      return currentStep?.title_animation!;
+                    return "";
+                  })()
+            }
+          />
 
           {/* Base mask */}
           <Box
@@ -372,6 +348,33 @@ export default function TeethPlayer({
           )}
         </Box>
       </Box>
-    </Box>
+
+      {/* Controls */}
+      <Stack alignItems="center" direction="row">
+        <IconButton
+          onClick={handlePreviousStep}
+          disabled={currentStepIndex === 0}
+        >
+          <SkipPreviousIcon />
+        </IconButton>
+
+        {allStepsCompleted ? (
+          <IconButton onClick={handleReplay}>
+            <ReplayIcon />
+          </IconButton>
+        ) : (
+          <IconButton onClick={handlePlayPause}>
+            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+          </IconButton>
+        )}
+
+        <IconButton
+          onClick={handleNextStep}
+          disabled={allStepsCompleted || currentStepIndex >= data.steps.length}
+        >
+          <SkipNextIcon />
+        </IconButton>
+      </Stack>
+    </Stack>
   );
 }

@@ -1,5 +1,12 @@
 export const BASE_URL = "https://static.bright-plans.com/3d-player/";
 
+export const TOOTH_REGIONS = {
+  UPPER_RIGHT: 1,
+  UPPER_LEFT: 2,
+  LOWER_LEFT: 3,
+  LOWER_RIGHT: 4,
+} as const;
+
 export const TEETH_POSITIONS: Record<
   number,
   { x: number; y: number; z: number }

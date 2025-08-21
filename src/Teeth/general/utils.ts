@@ -1,4 +1,9 @@
-import { BASE_URL, DRILL_POSITIONS, TEETH_POSITIONS } from "./constants";
+import {
+  BASE_URL,
+  DRILL_POSITIONS,
+  TEETH_POSITIONS,
+  TOOTH_REGIONS,
+} from "./constants";
 import type { SceneObj } from "./types";
 
 export const preloadImages = (
@@ -68,9 +73,13 @@ export const getDrillPosition = (toothId?: number) => {
 };
 
 export const getToolTransformations = (region: number) => {
-  if (region === 1) return { rotateZ: 0, scaleX: 1.001, scaleY: 1.001 };
-  if (region === 2) return { rotateZ: 0, scaleX: -1, scaleY: 1.001 };
-  if (region === 3) return { rotateZ: 180, scaleX: 1, scaleY: 1 };
-  if (region === 4) return { rotateZ: 0, scaleX: 1.001, scaleY: -1 };
+  if (region === TOOTH_REGIONS.UPPER_RIGHT)
+    return { rotateZ: 0, scaleX: 1.001, scaleY: 1.001 };
+  if (region === TOOTH_REGIONS.UPPER_LEFT)
+    return { rotateZ: 0, scaleX: -1, scaleY: 1.001 };
+  if (region === TOOTH_REGIONS.LOWER_LEFT)
+    return { rotateZ: 180, scaleX: 1, scaleY: 1 };
+  if (region === TOOTH_REGIONS.LOWER_RIGHT)
+    return { rotateZ: 0, scaleX: 1.001, scaleY: -1 };
   return { rotateZ: 0, scaleX: 1, scaleY: 1 };
 };

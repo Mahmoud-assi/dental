@@ -3,14 +3,12 @@ import { Typography, Box } from "@mui/material";
 
 interface TitleAnimationProps {
   title: string;
-  isVisible: boolean;
   duration?: number;
   onAnimationComplete?(): void;
 }
 
 export default function TitleAnimation({
   title,
-  isVisible,
   duration = 1.5,
   onAnimationComplete,
 }: TitleAnimationProps) {
@@ -26,6 +24,7 @@ export default function TitleAnimation({
           width: "100%",
           textAlign: "center",
         }}
+        key={title}
       >
         <Box
           component={motion.div}
@@ -38,18 +37,15 @@ export default function TitleAnimation({
           }}
           onAnimationComplete={onAnimationComplete}
         >
-          {isVisible && (
-            <Typography
-              variant="h6"
-              sx={{
-                color: "primary.dark",
-                fontSize: 30,
-              }}
-            >
-              {title}
-            </Typography>
-          )}
-          {}
+          <Typography
+            variant="h6"
+            sx={{
+              color: "primary.dark",
+              fontSize: 30,
+            }}
+          >
+            {title}
+          </Typography>
         </Box>
       </Box>
     </AnimatePresence>
