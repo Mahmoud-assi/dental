@@ -12,7 +12,7 @@ import type {
   SceneObj,
   StepAnimation,
   Step,
-} from "./types";
+} from "../Teeth/general/types";
 
 // @ts-ignore
 const runSequence = async (seq: { controls: any; animation: any }[]) => {
@@ -318,109 +318,6 @@ const PmAnimationViewerReact: React.FC<PmAnimationViewerProps> = ({
     setScene([]);
   }, []);
 
-  // Add near the other helpers (e.g. after getAngleOffsets) --------------------------------
-  // const computeTeethPositions = useCallback(() => {
-  //   // Scene box reference size (these match your scene Box width/height)
-  //   const sceneW = 700;
-  //   const sceneH = 1100;
-
-  //   // Centers for the arcs (tune these if artwork uses different alignment)
-  //   const upperCenter = { x: sceneW / 2, y: 260 }; // center of upper jaw arc
-  //   const lowerCenter = { x: sceneW / 2, y: 840 }; // center of lower jaw arc
-
-  //   // Radii for the arcs (tune)
-  //   const upperRadius = 300; // how "wide" the upper arc is
-  //   const lowerRadius = 300; // how "wide" the lower arc is
-
-  //   // Angles (in degrees) span for upper arc (leftmost -> rightmost)
-  //   // We choose 200° -> 340° for the top arc (goes above the center)
-  //   const degToRad = (d: number) => (d * Math.PI) / 180;
-  //   const upperStart = degToRad(200);
-  //   const upperEnd = degToRad(340);
-
-  //   // Lower arc (leftmost -> rightmost) below center: 20° -> 160°
-  //   const lowerStart = degToRad(20);
-  //   const lowerEnd = degToRad(160);
-
-  //   // Ordering arrays: left-to-right for rendering (you can flip if needed)
-  //   const upperOrder = [
-  //     28,
-  //     27,
-  //     26,
-  //     25,
-  //     24,
-  //     23,
-  //     22,
-  //     21, // upper-left (left of midline)
-  //     11,
-  //     12,
-  //     13,
-  //     14,
-  //     15,
-  //     16,
-  //     17,
-  //     18, // upper-right (right of midline)
-  //   ];
-  //   const lowerOrder = [
-  //     38,
-  //     37,
-  //     36,
-  //     35,
-  //     34,
-  //     33,
-  //     32,
-  //     31, // lower-left
-  //     41,
-  //     42,
-  //     43,
-  //     44,
-  //     45,
-  //     46,
-  //     47,
-  //     48, // lower-right
-  //   ];
-
-  //   // Assumed tooth image dimensions (half extents used to center image at computed point).
-  //   // Tweak these values to match the actual tooth PNG dimensions (visual centering).
-  //   const toothImgW = 120;
-  //   const toothImgH = 160;
-
-  //   const res: Record<number, { x: number; y: number; z: number }> = {};
-
-  //   // helper for linear interpolation of angles
-  //   const lerpAngle = (start: number, end: number, i: number, n: number) =>
-  //     start + (i / (n - 1 || 1)) * (end - start);
-
-  //   // upper: 16 positions
-  //   for (let i = 0; i < upperOrder.length; i++) {
-  //     const toothId = upperOrder[i];
-  //     const angle = lerpAngle(upperStart, upperEnd, i, upperOrder.length);
-  //     const px = upperCenter.x + upperRadius * Math.cos(angle);
-  //     const py = upperCenter.y + upperRadius * Math.sin(angle);
-
-  //     res[toothId] = {
-  //       x: Math.round(px - toothImgW / 2),
-  //       y: Math.round(py - toothImgH / 2),
-  //       z: 1000, // above base jaw
-  //     };
-  //   }
-
-  //   // lower: 16 positions
-  //   for (let i = 0; i < lowerOrder.length; i++) {
-  //     const toothId = lowerOrder[i];
-  //     const angle = lerpAngle(lowerStart, lowerEnd, i, lowerOrder.length);
-  //     const px = lowerCenter.x + lowerRadius * Math.cos(angle);
-  //     const py = lowerCenter.y + lowerRadius * Math.sin(angle);
-
-  //     res[toothId] = {
-  //       x: Math.round(px - toothImgW / 2),
-  //       y: Math.round(py - toothImgH / 2),
-  //       z: 1000,
-  //     };
-  //   }
-
-  //   return res;
-  // }, []);
   const computeTeethPositions = useCallback(() => {
     // container size used in your JSX (700x1100)
     const sceneW = 700;
@@ -517,94 +414,6 @@ const PmAnimationViewerReact: React.FC<PmAnimationViewerProps> = ({
 
     return res;
   }, []);
-
-  // -----------------------------------------------------------------------------------------
-
-  // const buildScene = useCallback(
-  //   (stepIndex: number) => {
-  //     stepStartedRef.current = new Date();
-  //     const base: SceneObj[] = [
-  //       {
-  //         src: "drill",
-  //         hidden: "1",
-  //         position: { z: 9999 },
-  //         unique_key: "drill",
-  //         tool: "drill",
-  //       },
-  //       {
-  //         src: "laser",
-  //         hidden: "1",
-  //         position: { z: 9999 },
-  //         unique_key: "laser",
-  //         tool: "laser",
-  //       },
-  //       // Add all teeth (hidden by default)
-  //       ...toothIds.map((id) => ({
-  //         src: `1/${id}`,
-  //         position: {
-  //           ...toothPositions[id as keyof typeof toothPositions],
-  //           z: 1000,
-  //         },
-  //         unique_key: `tooth_${id}`,
-  //         tooth_id: id,
-  //       })),
-  //     ];
-  //     const step = queueData[stepIndex];
-  //     const full = [...base, ...(step?.base || [])].map((s) => ({
-  //       ...s,
-  //       loaded: false,
-  //     }));
-  //     setScene(full);
-  //   },
-  //   [queueData, toothIds]
-  // );
-
-  // const buildScene = useCallback(
-  //   (stepIndex: number) => {
-  //     stepStartedRef.current = new Date();
-
-  //     // compute positions programmatically
-  //     const positions = computeTeethPositions();
-
-  //     // base elements (tools + teeth - teeth will receive generated positions)
-  //     const base: SceneObj[] = [
-  //       {
-  //         src: "drill",
-  //         hidden: "1",
-  //         position: { z: 9999 },
-  //         unique_key: "drill",
-  //         tool: "drill",
-  //       },
-  //       {
-  //         src: "laser",
-  //         hidden: "1",
-  //         position: { z: 9999 },
-  //         unique_key: "laser",
-  //         tool: "laser",
-  //       },
-  //       // Add all teeth - assign computed positions
-  //       ...toothIds.map((id) => ({
-  //         src: `1/${id}`,
-  //         position: {
-  //           // override any previous data and use computed positions if available
-  //           x: positions[id]?.x ?? 0,
-  //           y: positions[id]?.y ?? 0,
-  //           z: positions[id]?.z ?? 1000,
-  //         },
-  //         unique_key: `tooth_${id}`,
-  //         tooth_id: id,
-  //       })),
-  //     ];
-
-  //     const step = queueData[stepIndex];
-  //     const full = [...base, ...(step?.base || [])].map((s) => ({
-  //       ...s,
-  //       loaded: false,
-  //     }));
-  //     setScene(full);
-  //   },
-  //   [queueData, toothIds, computeTeethPositions]
-  // );
 
   const buildScene = useCallback(
     (stepIndex: number) => {

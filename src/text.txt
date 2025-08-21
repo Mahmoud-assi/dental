@@ -1,0 +1,6 @@
+/1/number.png  - Teeth
+/2/number.png  - Tooth gums
+/3/number.png  - Aesthetic filling
+/15/number.png - Fitting Bridge  - second stage 
+/19/number.png - Fitting filling - first stage
+
