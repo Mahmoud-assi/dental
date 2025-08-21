@@ -12,6 +12,7 @@ import { getSceneObjectStyle } from "./general/utils";
 import { CircularProgress, IconButton, Stack } from "@mui/material";
 import ToothAnimation from "./ToothBridgeAnimation";
 import ToolAnimation from "./ToolAnimation";
+import ImplantAnimation from "./ImplantToothAnimation";
 import TitleAnimation from "./TitleAnimation";
 import { useAtom } from "jotai";
 import {
@@ -40,6 +41,7 @@ export default function TeethPlayer({
   const [completedSteps, setCompletedSteps] = useAtom(CompletedStepsAtom);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoPlay);
   const [showTool, setShowTool] = useState<boolean>(false);
+  const [showImplant, setShowImplant] = useState<boolean>(false);
   const [animationState, setAnimationState] = useState<
     "idle" | "animating" | "completed"
   >("idle");
@@ -117,7 +119,12 @@ export default function TeethPlayer({
           case "crown":
             return { ...obj, hidden: "0", animated: true };
           case "implant":
-            return { ...obj, hidden: "1", animated: false };
+            return {
+              ...obj,
+              src: `15/${step.toothId}`,
+              hidden: "0",
+              animated: false,
+            };
           default:
             return obj;
         }
@@ -125,6 +132,7 @@ export default function TeethPlayer({
     );
 
     setShowTool(false);
+    setShowImplant(false);
     setAnimationState("completed");
     onStepComplete?.(step);
 
@@ -144,16 +152,27 @@ export default function TeethPlayer({
     completeCurrentStep();
   }, [completeCurrentStep]);
 
+  const handleImplantAnimationComplete = useCallback(() => {
+    setAnimationState("completed");
+    completeCurrentStep();
+  }, [completeCurrentStep]);
+
   // Auto-play and step progression
   useEffect(() => {
     if (!isPlaying || allStepsCompleted || !isLoaded || !currentStep) return;
 
     setAnimationState("animating");
     setShowTool(false);
+    setShowImplant(false);
 
     const playStep = () => {
-      if (currentStep.tool) setTimeout(() => setShowTool(true), 100);
-      else setTimeout(() => completeCurrentStep(), 2000);
+      if (currentStep.tool) {
+        setTimeout(() => setShowTool(true), 100);
+      } else if (currentStep.type === "implant") {
+        setTimeout(() => setShowImplant(true), 100);
+      } else {
+        setTimeout(() => completeCurrentStep(), 2000);
+      }
     };
 
     playStep();
@@ -180,8 +199,6 @@ export default function TeethPlayer({
     setIsPlaying(true);
   };
 
-  // ✅ NEXT: complete current, move forward (completeCurrentStep already bumps index),
-  // then ensure the NEW step starts animating
   const handleNextStep = () => {
     if (allStepsCompleted) return;
 
@@ -199,10 +216,10 @@ export default function TeethPlayer({
 
     // start animating the next step
     setShowTool(false);
+    setShowImplant(false);
     setIsPlaying(true);
   };
 
-  // ✅ PREV: revert the previous step and move back one
   const handlePreviousStep = () => {
     if (currentStepIndex <= 0) return;
 
@@ -213,6 +230,7 @@ export default function TeethPlayer({
 
     setCurrentStepIndex(prevStepIndex);
     setShowTool(false);
+    setShowImplant(false);
     setAnimationState("idle");
     setIsPlaying(false);
 
@@ -230,6 +248,7 @@ export default function TeethPlayer({
     setCompletedSteps(new Set());
     setIsPlaying(false);
     setShowTool(false);
+    setShowImplant(false);
     setAnimationState("idle");
   };
 
@@ -246,14 +265,10 @@ export default function TeethPlayer({
     );
   }
 
+  console.log(showImplant);
+
   return (
     <Stack justifyContent="center" alignItems="center" width="100%" spacing={2}>
-      {/* Progress indicator */}
-      {/* <Typography variant="body2" color="text.secondary">
-        Step {Math.min(currentStepIndex + 1, data.steps.length)} of{" "}
-        {data.steps.length}: {currentStep?.title}
-      </Typography> */}
-
       {/* Teeth visualization */}
       <Box
         sx={{
@@ -297,7 +312,7 @@ export default function TeethPlayer({
                 component="img"
                 key={sceneObj.unique_key}
                 src={`${BASE_URL}${sceneObj.src}.png`}
-                style={getSceneObjectStyle(sceneObj)}
+                sx={getSceneObjectStyle(sceneObj)}
               />
             ))}
 
@@ -309,7 +324,6 @@ export default function TeethPlayer({
           />
 
           {/* Title animation */}
-
           <TitleAnimation
             title={
               allStepsCompleted
@@ -344,6 +358,16 @@ export default function TeethPlayer({
               tool={currentStep.tool}
               activeToothId={currentStep.toothId}
               onAnimationComplete={handleToolAnimationComplete}
+            />
+          )}
+
+          {/* Implant animation */}
+          {currentStep?.type === "implant" && (
+            <ImplantAnimation
+              activeToothId={currentStep.toothId}
+              visible={showImplant && isPlaying}
+              scene={currentScene}
+              onAnimationComplete={handleImplantAnimationComplete}
             />
           )}
         </Box>

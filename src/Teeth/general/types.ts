@@ -3,6 +3,14 @@ export type PlayerParams = {
   language?: "en" | "de" | string;
 };
 
+export type SceneType =
+  | "normal"
+  | "bridge"
+  | "filling"
+  | "implant"
+  | "crown"
+  | "tool";
+
 export interface SceneObj {
   src: string;
   position: { x?: number; y?: number; z?: number };
@@ -10,6 +18,7 @@ export interface SceneObj {
   hidden?: string | number | boolean;
   tooth_id?: number;
   tool?: "drill" | "laser";
+  type?: SceneType;
   animated?: boolean;
 }
 

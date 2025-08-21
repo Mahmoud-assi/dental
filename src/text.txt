@@ -3,5 +3,5 @@
 /3/number.png  - Aesthetic filling
 /15/number.png - Fitting Bridge  - second stage 
 /19/number.png - Fitting filling - first stage
-/11/number.png - برغي same pos as tooth
-/13/number.png - برغي 2 same pos as tooth
+/11/number.png - screw - same pos as tooth
+/13/number.png - screw second stage - same pos as tooth

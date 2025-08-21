@@ -1,7 +1,8 @@
 import { Provider } from "jotai";
 import { store } from "./heplers/Jotai";
 import { Box } from "@mui/material";
-import Jaw from "./Jaw";
+// import Jaw from "./Jaw";
+import TeethAnimations from "./Teeth";
 
 const App = () => {
   return (
@@ -15,8 +16,8 @@ const App = () => {
         px={3}
         overflow="hidden"
       >
-        <Jaw />
-        {/* <TeethAnimations /> */}
+        {/* <Jaw /> */}
+        <TeethAnimations />
       </Box>
     </Provider>
   );
